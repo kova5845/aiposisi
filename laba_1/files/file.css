@@ -1,0 +1,22 @@
+p {
+    font-family: Tahoma, serif;
+}
+#news p { /* стиль тега p у элемента с id="news" */
+    color: blue;
+}
+h2 {
+    font-size: 10px;
+    color: green;
+    background: white;
+}
+p#paragraph1 {
+    margin: 0;
+}
+.note {
+    color: red;
+    background: yellow;
+    font-weight: bold;
+}
+a:hover { /* стиль для наведения на ссылки */
+    text-decoration: none;
+}

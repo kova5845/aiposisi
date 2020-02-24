@@ -1,7 +1,7 @@
 p {
     font-family: Tahoma, serif;
 }
-#news p { /* стиль тега p у элемента с id="news" */
+#news p {
     color: blue;
 }
 h2 {
@@ -17,6 +17,6 @@ p#paragraph1 {
     background: yellow;
     font-weight: bold;
 }
-a:hover { /* стиль для наведения на ссылки */
+a:hover {
     text-decoration: none;
 }

@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79649677-6226-4aee-b7e1-9377e0afd125" name="Default Changelist" comment="" />
+    <list default="true" id="79649677-6226-4aee-b7e1-9377e0afd125" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/files/options.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/files/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/file.css" beforeDir="false" afterPath="$PROJECT_DIR$/files/file.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aiposisi_laba_1/Handler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aiposisi_laba_1/Handler$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aiposisi_laba_1/Handler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aiposisi_laba_1/Handler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,10 +25,16 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1XU8KDQrPJ5S75dZStCMgG83uyl" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -58,11 +74,31 @@
       <option name="presentableId" value="Default" />
       <updated>1581089249619</updated>
       <workItem from="1581089261699" duration="169000" />
-      <workItem from="1581089669144" duration="7938000" />
+      <workItem from="1581089669144" duration="8250000" />
+      <workItem from="1581152694601" duration="1593000" />
+      <workItem from="1581248130564" duration="3725000" />
+      <workItem from="1581350131403" duration="4777000" />
+      <workItem from="1582270432534" duration="5454000" />
+      <workItem from="1582305570704" duration="5848000" />
+      <workItem from="1582316510512" duration="7040000" />
+      <workItem from="1582464208578" duration="1277000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

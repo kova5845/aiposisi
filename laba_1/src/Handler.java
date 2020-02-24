@@ -1,7 +1,4 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +14,7 @@ public class Handler extends Thread{
         put("css", "text/css");
         put("txt", "text/plain");
         put("js", "text/javascript");
-        put(".svg", "image/svg+xml");
+        put("svg", "image/svg+xml");
         put("", "text/plain");
     }};
 
@@ -32,34 +29,61 @@ public class Handler extends Thread{
 
     @Override
     public void run() {
-        try(var input = this.socket.getInputStream(); var output = this.socket.getOutputStream()){
-            var url = this.getRequestUrl(input);
-            var filePath = Path.of(this.directory + url);
-            if(Files.exists(filePath) && !Files.isDirectory(filePath)){
-                var extension = this.getFileExtension(filePath);
-                var type = CONTENT_TYPES.get(extension);
-                var fileBytes = Files.readAllBytes(filePath);
-                this.sendHeader(output, 200, "OK", type, fileBytes.length);
-                output.write(fileBytes);
-            } else{
-                var type = CONTENT_TYPES.get("text");
-                this.sendHeader(output, 404, "Not Found", type, NOT_FOUND_MESSAGE.length());
-                output.write(NOT_FOUND_MESSAGE.getBytes());
+        try {
+            InputStream input = this.socket.getInputStream();
+            OutputStream output = this.socket.getOutputStream();
+            String requestText = this.getRequestText(input);
+            String requestType = this.getRequestType(requestText);
+            String requestUrl = this.getRequestUrl(requestText);
+            System.out.println(requestType + " " + requestUrl);
+            switch (requestType){
+                case "POST":
+                    System.out.println("server handle post request");
+                    break;
+                case "GET":
+                    Path filePath = Path.of(this.directory + requestUrl);
+                    if(Files.exists(filePath) && !Files.isDirectory(filePath)){
+                        String extension = this.getFileExtension(filePath);
+                        String type = CONTENT_TYPES.get(extension);
+                        byte[] fileBytes = Files.readAllBytes(filePath);
+                        this.sendHeader(output, 200, "OK", type, fileBytes.length);
+                        output.write(fileBytes);
+                    } else{
+                        String type = CONTENT_TYPES.get("text");
+                        this.sendHeader(output, 404, "Not Found", type, NOT_FOUND_MESSAGE.length());
+                        output.write(NOT_FOUND_MESSAGE.getBytes());
+                    }
+                    break;
+                case "OPTIONS":
+                    System.out.println("server handle option request");
+                    break;
+                default:
+                    System.out.println("DEFAULT");
             }
+
         } catch (IOException e){
             e.printStackTrace();
         }
     }
 
-    private String getRequestUrl(InputStream input){
+    private String getRequestText(InputStream input) throws IOException{
         var reader = new Scanner(input).useDelimiter("\r\n");
         var line = reader.next();
-        return line.split(" ")[1];
+        String[] arr = line.split(" ");
+        return arr[0] + " " + arr[1];
+    }
+
+    private String getRequestType(String input){
+        return input.split(" ")[0];
+    }
+
+    private String getRequestUrl(String input){
+        return input.split(" ")[1];
     }
 
     private String getFileExtension(Path path){
-        var name = path.getFileName().toString();
-        var extensionStart = name.lastIndexOf(".");
+        String name = path.getFileName().toString();
+        int extensionStart = name.lastIndexOf(".");
         return  extensionStart == -1 ? "" : name.substring(extensionStart + 1);
     }
 
@@ -68,6 +92,5 @@ public class Handler extends Thread{
         ps.printf("HTTP/1.1 %s %s%n", statusCode, statusText);
         ps.printf("Content-Type: %s%n", type);
         ps.printf("Content-Length: %s%n%n", length);
-
     }
 }

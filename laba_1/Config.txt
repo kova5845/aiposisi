@@ -1,0 +1,5 @@
+HTTP/1.1 %s %s
+Content-Type: %s
+Content-Length: %s
+Access-Control-Allow-Origin: %s
+Access-Control-Allow-Method: %s%n%n

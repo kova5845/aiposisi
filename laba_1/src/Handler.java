@@ -33,26 +33,28 @@ public class Handler extends Thread{
             InputStream input = this.socket.getInputStream();
             OutputStream output = this.socket.getOutputStream();
             String requestText = this.getRequestText(input);
+            System.out.println(requestText);
             String requestType = this.getRequestType(requestText);
             String requestUrl = this.getRequestUrl(requestText);
-            System.out.println(requestType + " " + requestUrl);
             switch (requestType){
                 case "POST":
                     System.out.println("server handle post request");
                     break;
                 case "GET":
                     Path filePath = Path.of(this.directory + requestUrl);
+                    String answerText = "";
                     if(Files.exists(filePath) && !Files.isDirectory(filePath)){
                         String extension = this.getFileExtension(filePath);
                         String type = CONTENT_TYPES.get(extension);
                         byte[] fileBytes = Files.readAllBytes(filePath);
-                        this.sendHeader(output, 200, "OK", type, fileBytes.length);
+                        answerText = this.sendHeader(output, 200, "OK", type, fileBytes.length, requestType);
                         output.write(fileBytes);
                     } else{
                         String type = CONTENT_TYPES.get("text");
-                        this.sendHeader(output, 404, "Not Found", type, NOT_FOUND_MESSAGE.length());
+                        answerText = this.sendHeader(output, 404, "Not Found", type, NOT_FOUND_MESSAGE.length(), requestType);
                         output.write(NOT_FOUND_MESSAGE.getBytes());
                     }
+                    this.writeLog(requestText, answerText);
                     break;
                 case "OPTIONS":
                     System.out.println("server handle option request");
@@ -67,10 +69,14 @@ public class Handler extends Thread{
     }
 
     private String getRequestText(InputStream input) throws IOException{
-        var reader = new Scanner(input).useDelimiter("\r\n");
-        var line = reader.next();
-        String[] arr = line.split(" ");
-        return arr[0] + " " + arr[1];
+        Scanner reader = new Scanner(input);
+        String line = "";
+        int i = 10;
+        while (reader.hasNext() && i > 0) {
+            line += reader.nextLine() + "\n";
+            i--;
+        }
+        return line;
     }
 
     private String getRequestType(String input){
@@ -87,10 +93,38 @@ public class Handler extends Thread{
         return  extensionStart == -1 ? "" : name.substring(extensionStart + 1);
     }
 
-    private void sendHeader(OutputStream output, int statusCode, String statusText, String type, long length){
-        var ps = new PrintStream(output);
-        ps.printf("HTTP/1.1 %s %s%n", statusCode, statusText);
-        ps.printf("Content-Type: %s%n", type);
-        ps.printf("Content-Length: %s%n%n", length);
+    private String sendHeader(OutputStream output, int statusCode, String statusText, String type, long length, String requestType){
+        PrintStream ps = new PrintStream(output);
+        String answer = "";
+        File file = new File("D://aiposisi//laba_1//Config.txt");
+        try (FileInputStream fin = new FileInputStream(file)) {
+            answer = new String(fin.readAllBytes());
+            answer = String.format(answer, statusCode, statusText, type, length, "localhost", requestType);
+            System.out.println(answer);
+            output.write(answer.getBytes());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return answer;
+    }
+
+    private void writeLog(String requestText, String answerText) {
+        try{
+            File file = new File("D://aiposisi//laba_1//file.log");
+            file.createNewFile();
+            FileOutputStream fout = new FileOutputStream(file, false);
+            byte[] bufferRequest = requestText.getBytes();
+            fout.write(bufferRequest, 0, bufferRequest.length);
+            fout.write("\n\n".getBytes());
+            byte[] bufferAnswer = answerText.getBytes();
+            fout.write(bufferAnswer, 0, bufferAnswer.length);
+
+
+        } catch(IOException e){
+            System.out.println(e);
+        }
+
     }
 }

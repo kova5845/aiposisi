@@ -10,7 +10,7 @@ public class Handler extends Thread{
 
     private static final Map<String, String> CONTENT_TYPES = new HashMap<>(){{
         put("png", "image/png");
-        put("html", "text/html");
+        put("html", "text/plain");
         put("css", "text/css");
         put("txt", "text/plain");
         put("js", "text/javascript");

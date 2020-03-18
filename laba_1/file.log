@@ -1,18 +1,18 @@
-GET /file.txt HTTP/1.1
+GET /file.png HTTP/1.1
 Host: localhost:8080
 Connection: keep-alive
-Cache-Control: max-age=0
 Upgrade-Insecure-Requests: 1
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 OPR/66.0.3515.115
 Sec-Fetch-User: ?1
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
 Sec-Fetch-Site: none
 Sec-Fetch-Mode: navigate
+Accept-Encoding: gzip, deflate, br
 
 
 HTTP/1.1 200 OK
-Content-Type: text/plain
-Content-Length: 12
+Content-Type: image/png
+Content-Length: 383589
 Access-Control-Allow-Origin: localhost
 Access-Control-Allow-Method: GET
 

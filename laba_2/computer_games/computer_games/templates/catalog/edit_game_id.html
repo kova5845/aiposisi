@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{game.name}}{% endblock %}
+
+{% block content %}
+
+    <form action="{% url 'catalog:edit_game_id_edit' game.id %}" method="post">
+        {% csrf_token %}
+        <input type="text" size="20" name="name" value="{{game.name}}">
+        <input type="text" size="20" name="genre" value="{{game.genre}}">
+        <input type="text" size="20" name="setting" value="{{game.setting}}">
+        <input type="date" id="start" name="date"
+               value="{{game_date}}"
+               min="1900-01-01" max="2020-12-31">
+        <button type="submit">OK</button>
+    </form>
+    <br>
+    <a href="{% url 'catalog:view_game' %}">назад</a>
+
+{% endblock %}

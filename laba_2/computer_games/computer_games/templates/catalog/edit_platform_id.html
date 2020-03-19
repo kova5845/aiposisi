@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}{{platform.name}}{% endblock %}
+
+{% block content %}
+
+    <form action="{% url 'catalog:edit_platform_id_edit' platform.id %}" method="post">
+        {% csrf_token %}
+        <input type="text" size="20" name="name" value="{{platform.name}}">
+        <input type="date" id="start" name="date"
+               value="{{platform_date}}"
+               min="1900-01-01" max="2020-12-31">
+        <button type="submit">OK</button>
+    </form>
+    <br>
+    <a href="{% url 'catalog:view_platform' %}">назад</a>
+
+{% endblock %}

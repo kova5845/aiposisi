@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{{game.name}}{% endblock %}
+
+{% block content %}
+
+    <div>
+        {{game.name}}
+        {{game.genre}}
+        {{game.setting}}
+        {{game.date}}
+    </div>
+    <br>
+    <a href="{% url 'catalog:view_game' %}">назад</a>
+
+{% endblock %}

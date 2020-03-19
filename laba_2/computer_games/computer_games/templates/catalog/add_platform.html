@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить{% endblock %}
+
+{% block content %}
+
+    <form action="{% url 'catalog:add_platform_platform' %}" method="post">
+        {% csrf_token %}
+        <input type="text" size="20" name="name" placeholder="Имя">
+        <input type="date" id="start" name="date"
+               value="2018-05-15"
+               min="1900-01-01" max="2020-12-31">
+        <button type="submit">OK</button>
+    </form>
+    <br>
+    <a href="{% url 'catalog:view_platform' %}">назад</a>
+
+{% endblock %}

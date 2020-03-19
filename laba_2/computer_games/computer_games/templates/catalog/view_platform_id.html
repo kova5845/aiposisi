@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}{{platform.name}}{% endblock %}
+
+{% block content %}
+
+    <div>
+        {{platform.name}}
+        {{platform.date}}
+    </div>
+    <br>
+    <a href="{% url 'catalog:view_platform' %}">назад</a>
+
+{% endblock %}

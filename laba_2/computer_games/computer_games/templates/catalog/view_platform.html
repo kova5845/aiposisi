@@ -4,19 +4,19 @@
 
 {% block content %}
 
-    <form method="LINK" action="{% url 'catalog:add_game' %}">
+    <form method="LINK" action="{% url 'catalog:add_platform' %}">
         <input type="submit" value="add">
     </form><br>
 
-    {% if game_list %}
+    {% if platform_list %}
 
-        {% for i in game_list %}
+        {% for i in platform_list %}
             <div>
-                <a href="{% url 'catalog:view_game_id' i.id %}">{{i.name}}</a>
-                <form method="LINK" action="{% url 'catalog:edit_game_id' i.id %}">
+                <a href="{% url 'catalog:view_platform_id' i.id %}">{{i.name}}</a>
+                <form method="LINK" action="{% url 'catalog:edit_platform_id' i.id %}">
                     <input type="submit" value="edit">
                 </form>
-                <form method="LINK" action="{% url 'catalog:delete_game_id' i.id %}">
+                <form method="LINK" action="{% url 'catalog:delete_platform_id' i.id %}">
                     <input type="submit" value="delete">
                 </form>
             </div>

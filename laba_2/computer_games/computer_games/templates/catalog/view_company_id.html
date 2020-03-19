@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{company.name}}{% endblock %}
+
+{% block content %}
+
+    <div>
+        {{company.name}}
+        {{company.place}}
+        {{company.date}}
+    </div>
+    <br>
+    <a href="{% url 'catalog:view_company' %}">назад</a>
+
+{% endblock %}

@@ -8,21 +8,23 @@ class ComputerGame(models.Model):
     date = models.DateField('дата создания')
 
 
-class Company(models.Model):
-    name = models.CharField('название', max_length=50)
-    place = models.CharField('место расположения', max_length=50)
-    date = models.DateField('дата создания')
-    game = models.ForeignKey(ComputerGame, on_delete=models.CASCADE)
-
-
 class Platform(models.Model):
     name = models.CharField('название', max_length=50)
-    company = models.CharField('компания', max_length=50)
+    date = models.DateField('дата создания')
     game = models.ManyToManyField(ComputerGame)
 
 
 class Engine(models.Model):
     name = models.CharField('название', max_length=50)
-    company = models.CharField('компания', max_length=50)
     language = models.CharField('язык программирования', max_length=50)
-    game = models.ForeignKey(ComputerGame, on_delete=models.CASCADE)
+    date = models.DateField('дата создания')
+    game = models.ForeignKey(ComputerGame, on_delete=models.CASCADE, null=True, blank=True)
+
+
+class Company(models.Model):
+    name = models.CharField('название', max_length=50)
+    place = models.CharField('место расположения', max_length=50)
+    date = models.DateField('дата создания')
+    game = models.ForeignKey(ComputerGame, on_delete=models.CASCADE, null=True, blank=True)
+    platform = models.ForeignKey(Platform, on_delete=models.CASCADE, null=True, blank=True)
+    engine = models.ForeignKey(Engine, on_delete=models.CASCADE, null=True, blank=True)

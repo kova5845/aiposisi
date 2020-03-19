@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{engine.name}}{% endblock %}
+
+{% block content %}
+
+    <div>
+        {{engine.name}}
+        {{engine.language}}
+        {{engine.date}}
+    </div>
+    <br>
+    <a href="{% url 'catalog:view_engine' %}">назад</a>
+
+{% endblock %}

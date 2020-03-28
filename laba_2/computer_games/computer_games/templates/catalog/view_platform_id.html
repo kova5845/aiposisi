@@ -2,13 +2,24 @@
 
 {% block title %}{{platform.name}}{% endblock %}
 
+{% block page_title %}Show Platform{% endblock %}
+
 {% block content %}
 
-    <div>
-        {{platform.name}}
-        {{platform.date}}
+    <div class="wrapper">
+        <form action="#" method="get">
+            <dl>
+                <dt><h3 class="games-base-names">Name:</h3></dt>
+                <dd><p class="games-base-description">{{platform.name}}</p></dd>
+
+                <dt><h3 class="games-base-names">Date:</p></dt>
+                <dd><p class="games-base-description">{{platform.date}}</p></dd>
+            </dl>
+        </form>
     </div>
-    <br>
-    <a href="{% url 'catalog:view_platform' %}">назад</a>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_platform' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
 
 {% endblock %}

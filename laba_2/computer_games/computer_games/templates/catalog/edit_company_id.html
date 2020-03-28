@@ -2,18 +2,25 @@
 
 {% block title %}{{company.name}}{% endblock %}
 
+{% block page_title %}Edit Company{% endblock %}
+
 {% block content %}
 
-    <form action="{% url 'catalog:edit_company_id_edit' company.id %}" method="post">
-        {% csrf_token %}
-        <input type="text" size="20" name="name" value="{{company.name}}">
-        <input type="text" size="20" name="place" value="{{company.place}}">
-        <input type="date" id="start" name="date"
+    <h2 class="games-base-title">Editing company</h2>
+    <div class="wrapper">
+        <form action="{% url 'catalog:edit_company_id_edit' company.id %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name (Required)" minlength="1" value="{{company.name}}" required>
+            <input type="text" name="place" placeholder="Place (Required)" minlength="1" value="{{company.place}}" required>
+            <input type="date" name="date"
                value="{{company_date}}"
-               min="1900-01-01" max="2020-12-31">
-        <button type="submit">OK</button>
-    </form>
-    <br>
-    <a href="{% url 'catalog:view_company' %}">назад</a>
+               min="1900-01-01" max="2020-12-31" required>
+            <input class="games-base-button" type="submit" value="Submit">
+        </form>
+    </div>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_company' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
 
 {% endblock %}

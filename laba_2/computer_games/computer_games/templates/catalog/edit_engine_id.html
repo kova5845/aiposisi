@@ -2,18 +2,34 @@
 
 {% block title %}{{engine.name}}{% endblock %}
 
+{% block page_title %}Edit Engine{% endblock %}
+
 {% block content %}
 
-    <form action="{% url 'catalog:edit_engine_id_edit' engine.id %}" method="post">
-        {% csrf_token %}
-        <input type="text" size="20" name="name" value="{{engine.name}}">
-        <input type="text" size="20" name="language" value="{{engine.language}}">
-        <input type="date" id="start" name="date"
+    <h2 class="games-base-title">Editing engine</h2>
+    <div class="wrapper">
+        <form action="{% url 'catalog:edit_engine_id_edit' engine.id %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name (Required)" minlength="1" value="{{engine.name}}" required>
+            <input type="text" name="language" placeholder="Language (Required)" minlength="1" value="{{engine.language}}" required>
+            <input type="date" name="date"
                value="{{engine_date}}"
-               min="1900-01-01" max="2020-12-31">
-        <button type="submit">OK</button>
-    </form>
-    <br>
-    <a href="{% url 'catalog:view_engine' %}">назад</a>
+               min="1900-01-01" max="2020-12-31" required>
+            <select name="company">
+                {% for i in company %}
+                    {% if i == engine.company %}
+                        <option selected="selected">{{i.name}}</option>
+                    {% else %}
+                        <option>{{i.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <input class="games-base-button" type="submit" value="Submit">
+        </form>
+    </div>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_engine' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
 
 {% endblock %}

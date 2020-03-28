@@ -2,27 +2,29 @@
 
 {% block title %}Список{% endblock %}
 
+{% block page_title %}Game List{% endblock %}
+
+{% block add_button %}
+    <input class="games-base-button" type="submit" value="Add" onClick='location.href="{% url 'catalog:add_game' %}"'>
+{% endblock %}
+
 {% block content %}
 
-    <form method="LINK" action="{% url 'catalog:add_game' %}">
-        <input type="submit" value="add">
-    </form><br>
+    {% if my_list %}
+        <div class="wrapper">
+            <form action="#" method="get">
+                {% for i in my_list %}
 
-    {% if game_list %}
+                    <div class="buttons">
+                        <a href="{% url 'catalog:view_game_id' i.id %}"><h3 class="games-base-names">{{i.name}}</a>
+                        <a href="{% url 'catalog:edit_game_id' i.id %}" class="btn">Edit</a>
+                        <a href="{% url 'catalog:delete_game_id' i.id %}" class="btn">Delete</a>
+                    </div>
 
-        {% for i in game_list %}
-            <div>
-                <a href="{% url 'catalog:view_game_id' i.id %}">{{i.name}}</a>
-                <form method="LINK" action="{% url 'catalog:edit_game_id' i.id %}">
-                    <input type="submit" value="edit">
-                </form>
-                <form method="LINK" action="{% url 'catalog:delete_game_id' i.id %}">
-                    <input type="submit" value="delete">
-                </form>
-            </div>
-
-        {% endfor %}
-
+                {% endfor %}
+                <textarea name="description" cols="30" rows="12"></textarea>
+            </form>
+        </div>
     {% endif %}
 
 {% endblock %}

@@ -6,7 +6,6 @@
 
 {% block content %}
 
-    <h2 class="games-base-title">Editing engine</h2>
     <div class="wrapper">
         <form action="{% url 'catalog:edit_engine_id_edit' engine.id %}" method="post">
             {% csrf_token %}
@@ -15,7 +14,7 @@
             <input type="date" name="date"
                value="{{engine_date}}"
                min="1900-01-01" max="2020-12-31" required>
-            <select name="company">
+            <select class = "selectors" name="company">
                 {% for i in company %}
                     {% if i == engine.company %}
                         <option selected="selected">{{i.name}}</option>

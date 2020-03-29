@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 def index(request):
-	return render(request, 'base.html')
+	return render(request, 'catalog/main.html')
 
 
 def view_game(request):
@@ -35,8 +35,12 @@ def add_game_game(request, game_id=None):
 	game.setting = request.POST['setting']
 	game.date = datetime.strptime(request.POST['date'], '%Y-%m-%d').date()
 	game.save()
-	platform = Platform.objects.get(name=request.POST['platform'])
-	game.platform.add(platform)
+	platform = []
+	for pl in request.POST.getlist('platform'):
+		platform.append(Platform.objects.get(name=pl))
+	game.platform.clear()
+	for pl in platform:
+		game.platform.add(pl)
 	company = Company.objects.get(name=request.POST['company'])
 	game.company = company
 	engine = Engine.objects.get(name=request.POST['engine'])

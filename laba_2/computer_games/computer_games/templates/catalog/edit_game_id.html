@@ -6,7 +6,6 @@
 
 {% block content %}
 
-    <h2 class="games-base-title">Editing game</h2>
     <div class="wrapper">
         <form action="{% url 'catalog:edit_game_id_edit' game.id %}" method="post">
             {% csrf_token %}
@@ -16,7 +15,7 @@
             <input type="date" name="date"
                value="{{game_date}}"
                min="1900-01-01" max="2020-12-31" required>
-            <select name="company">
+            <select class = "selectors" name="company">
                 {% for i in company %}
                     {% if i == game.company %}
                         <option selected="selected">{{i.name}}</option>
@@ -25,16 +24,16 @@
                     {% endif %}
                 {% endfor %}
             </select>
-            <select name="platform">
+            <select class = "selectors" name="platform" multiple>
                 {% for i in platform %}
-                    {% if i == game.platform %}
+                    {% if i in game.platform.all %}
                         <option selected="selected">{{i.name}}</option>
                     {% else %}
                         <option>{{i.name}}</option>
                     {% endif %}
                 {% endfor %}
             </select>
-            <select name="engine">
+            <select class = "selectors" name="engine">
                 {% for i in engine %}
                     {% if i == game.engine %}
                         <option selected="selected">{{i.name}}</option>

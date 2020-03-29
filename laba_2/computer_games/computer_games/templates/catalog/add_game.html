@@ -15,21 +15,26 @@
             <input type="date" name="date"
                value="2018-05-15"
                min="1900-01-01" max="2020-12-31" required>
-            <select name="company">
-                {% for i in company %}
-                    <option>{{i.name}}</option>
-                {% endfor %}
-            </select>
-            <select name="platform">
-                {% for i in platform %}
-                    <option>{{i.name}}</option>
-                {% endfor %}
-            </select>
-            <select name="engine">
-                {% for i in engine %}
-                    <option>{{i.name}}</option>
-                {% endfor %}
-            </select>
+            <div>
+                <select class="selectors" name="company">
+<!--                    <option disabled selected value> &#45;&#45; select an option &#45;&#45; </option>-->
+                    {% for i in company %}
+                        <option>{{i.name}}</option>
+                    {% endfor %}
+                </select>
+                <select class="selectors" name="platform" multiple>
+<!--                    <option disabled selected value> &#45;&#45; select an option &#45;&#45; </option>-->
+                    {% for i in platform %}
+                        <option>{{i.name}}</option>
+                    {% endfor %}
+                </select>
+                <select class="selectors" name="engine">
+<!--                    <option disabled selected value> &#45;&#45; select an option &#45;&#45; </option>-->
+                    {% for i in engine %}
+                        <option>{{i.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <input class="games-base-button" type="submit" value="Submit">
         </form>
     </div>

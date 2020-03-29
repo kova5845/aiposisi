@@ -29,6 +29,27 @@ p {
   margin: 0 auto;
 }
 
+.center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 34em
+}
+
+.selectors {
+  width: 619px;
+  height: 38px;
+  margin-bottom: 16px;
+  padding-bottom: 3px;
+  padding-left: 15px;
+
+  color: #f0d8d9;
+
+  background-color: #d6564f;
+  border: none;
+  border-radius: 5px;
+  outline:none;
+}
 
 .games-base {
   padding-top: 60px;
@@ -52,7 +73,7 @@ p {
   font-size: 20px;
   color: #f0d8d9;
   display: inline-block;
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 
@@ -118,6 +139,21 @@ input:last-child::placeholder {
   transition: background-color 0.3s, color 0.3s linear;
 }
 
+.games-main-base-button {
+  display: block;
+  width: 400px;
+  height: 80px;
+  margin-bottom: 10px;
+
+  font-weight: 600;
+  font-size: 15px;
+  color: white;
+  background-color: #203050;
+  cursor: pointer;
+
+  transition: background-color 0.3s, color 0.3s linear;
+}
+
 .games-base-button:hover {
   color: #e2d6d6;
 
@@ -164,6 +200,3 @@ input:last-child::placeholder {
 .buttons {
   padding-left: 1px;
 }
-
-
-

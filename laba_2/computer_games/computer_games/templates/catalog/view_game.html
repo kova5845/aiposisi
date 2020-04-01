@@ -10,10 +10,10 @@
 
 {% block content %}
 
-    {% if my_list %}
+    {% if contacts %}
         <div class="wrapper">
             <form action="#" method="get">
-                {% for i in my_list %}
+                {% for i in contacts %}
 
                     <div class="buttons">
                         <a href="{% url 'catalog:view_game_id' i.id %}"><h3 class="games-base-names">{{i.name}}</a>
@@ -22,6 +22,21 @@
                     </div>
 
                 {% endfor %}
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if contacts.has_previous %}
+                            <a href="?page={{ contacts.previous_page_number }}">previous</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
+                        </span>
+
+                        {% if contacts.has_next %}
+                            <a href="?page={{ contacts.next_page_number }}">next</a>
+                        {% endif %}
+                    </span>
+                </div>
                 <textarea name="description" cols="30" rows="12"></textarea>
             </form>
         </div>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{game.name}}{% endblock %}
+
+{% block page_title %}Show Game{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+        <form action="#" method="get">
+            <dl>
+                <dt><h3 class="games-base-names">Name:</h3></dt>
+                <dd><p class="games-base-description">{{game.name}}</p></dd>
+
+                <dt><h3 class="games-base-names">Genre:</p></dt>
+                <dd><p class="games-base-description">{{game.genre}}</p></dd>
+
+                <dt><h3 class="games-base-names">Setting:</p></dt>
+                <dd><p class="games-base-description">{{game.setting}}</p></dd>
+
+                <dt><h3 class="games-base-names">Date:</p></dt>
+                <dd><p class="games-base-description">{{game.date}}</p></dd>
+
+                <dt><h3 class="games-base-names">Company:</p></dt>
+                <dd><p class="games-base-description">{{game.company.name}}</p></dd>
+
+                <dt><h3 class="games-base-names">Engine:</p></dt>
+                <dd><p class="games-base-description">{{game.engine.name}}</p></dd>
+
+                <dt><h3 class="games-base-names">Platform:</p></dt>
+                {% for i in game.platform.all %}
+                    <dd><p class="games-base-description">{{i.name}}</p></dd>
+                {% endfor %}
+            </dl>
+        </form>
+    </div>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_game' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
+
+{% endblock %}

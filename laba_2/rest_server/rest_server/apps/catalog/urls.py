@@ -4,5 +4,6 @@ from . import views
 
 app_name = 'catalog'
 urlpatterns = [
-    path('view/game/', views.ComputerGameView.as_view(), name='view_game'),
+    path('game/', views.ComputerGameView.as_view(), name='game'),
+    path('game/<int:pk>', views.ComputerGameView.as_view(), name='game'),
 ]

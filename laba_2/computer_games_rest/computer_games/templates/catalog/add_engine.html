@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Add{% endblock %}
+
+{% block page_title %}Add Engine{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+        <form action="{% url 'catalog:add_engine_engine' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name (Required)" minlength="1" required>
+            <input type="text" name="language" placeholder="Language (Required)" minlength="1" required>
+            <input type="date" name="date"
+               value="2018-05-15"
+               min="1900-01-01" max="2020-12-31" required>
+            <select class = "selectors" name="company">
+                {% for i in company %}
+                    <option>{{i.name}}</option>
+                {% endfor %}
+            </select>
+            <input class="games-base-button" type="submit" value="Submit">
+        </form>
+    </div>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_engine' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
+
+{% endblock %}

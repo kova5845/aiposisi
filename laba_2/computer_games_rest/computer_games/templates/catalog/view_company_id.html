@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}{{company.name}}{% endblock %}
+
+{% block page_title %}Show Game{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+        <form action="#" method="get">
+            <dl>
+                <dt><h3 class="games-base-names">Name:</h3></dt>
+                <dd><p class="games-base-description">{{company.name}}</p></dd>
+
+                <dt><h3 class="games-base-names">Place:</p></dt>
+                <dd><p class="games-base-description">{{company.place}}</p></dd>
+
+                <dt><h3 class="games-base-names">Date:</p></dt>
+                <dd><p class="games-base-description">{{company.date}}</p></dd>
+            </dl>
+        </form>
+    </div>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_company' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
+
+{% endblock %}

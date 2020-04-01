@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}{{game.name}}{% endblock %}
+
+{% block page_title %}Edit Game{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+        <form action="{% url 'catalog:edit_game_id_edit' game.id %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name (Required)" minlength="1" value="{{game.name}}" required>
+            <input type="text" name="genre" placeholder="Genre (Required)" minlength="1" value="{{game.genre}}" required>
+            <input type="text" name="setting" placeholder="Setting (Required)" minlength="1" value="{{game.setting}}" required>
+            <input type="date" name="date"
+               value="{{game_date}}"
+               min="1900-01-01" max="2020-12-31" required>
+            <select class = "selectors" name="company">
+                {% for i in company %}
+                    {% if i == game.company %}
+                        <option selected="selected">{{i.name}}</option>
+                    {% else %}
+                        <option>{{i.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <select class = "selectors" name="platform" multiple>
+                {% for i in platform %}
+                    {% if i in game.platform.all %}
+                        <option selected="selected">{{i.name}}</option>
+                    {% else %}
+                        <option>{{i.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <select class = "selectors" name="engine">
+                {% for i in engine %}
+                    {% if i == game.engine %}
+                        <option selected="selected">{{i.name}}</option>
+                    {% else %}
+                        <option>{{i.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <input class="games-base-button" type="submit" value="Submit">
+        </form>
+    </div>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_game' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
+
+{% endblock %}

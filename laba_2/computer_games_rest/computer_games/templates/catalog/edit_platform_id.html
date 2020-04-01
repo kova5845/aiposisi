@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}{{platform.name}}{% endblock %}
+
+{% block page_title %}Edit Platform{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+        <form action="{% url 'catalog:edit_platform_id_edit' platform.id %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name (Required)" minlength="1" value="{{platform.name}}" required>
+            <input type="date" name="date"
+               value="{{platform_date}}"
+               min="1900-01-01" max="2020-12-31" required>
+            <select class = "selectors" name="company">
+                {% for i in company %}
+                    {% if i == platform.company %}
+                        <option selected="selected">{{i.name}}</option>
+                    {% else %}
+                        <option>{{i.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <input class="games-base-button" type="submit" value="Submit">
+        </form>
+    </div>
+    <div>
+        <input class="games-base-button" type="submit" value="Back" onClick='location.href="{% url 'catalog:view_platform' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
+
+{% endblock %}

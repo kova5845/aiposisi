@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Main{% endblock %}
+
+{% block page_title %}Computer Games{% endblock %}
+
+{% block exit %}{% endblock %}
+
+{% block content %}
+
+    <div class="center">
+        <input class="games-main-base-button" type="submit" value="Game" onClick='location.href="{% url 'catalog:view_game' %}"'>
+        <input class="games-main-base-button" type="submit" value="Engine" onClick='location.href="{% url 'catalog:view_engine' %}"'>
+        <input class="games-main-base-button" type="submit" value="Company" onClick='location.href="{% url 'catalog:view_company' %}"'>
+        <input class="games-main-base-button" type="submit" value="Platform" onClick='location.href="{% url 'catalog:view_platform' %}"'>
+        <textarea name="description" cols="30" rows="12"></textarea>
+    </div>
+
+{% endblock %}

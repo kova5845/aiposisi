@@ -1,9 +1,10 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
-from .models import ComputerGame, Company, Platform, Engine
 from django.urls import reverse
-from datetime import datetime
+import requests
+
+PORT = '5000'
 
 
 def index(request):
@@ -13,8 +14,8 @@ def index(request):
 
 def view_game(request):
 	print('Game list')
-	my_list = ComputerGame.objects.all()
-	paginator = Paginator(my_list, 5)
+	my_list = requests.get('http://localhost:{0}/catalog/game/'.format(PORT)).json()
+	paginator = Paginator(my_list['game'], 5)
 	page = request.GET.get('page')
 	try:
 		contacts = paginator.page(page)
@@ -27,9 +28,9 @@ def view_game(request):
 
 def add_game(request):
 	print('Add game')
-	company = Company.objects.all()
-	platform = Platform.objects.all()
-	engine = Engine.objects.all()
+	company = requests.get('http://localhost:{0}/catalog/company/'.format(PORT)).json()['company']
+	platform = requests.get('http://localhost:{0}/catalog/platform/'.format(PORT)).json()['platform']
+	engine = requests.get('http://localhost:{0}/catalog/engine/'.format(PORT)).json()['engine']
 	return render(request, 'catalog/add_game.html', {
 		'company': company,
 		'platform': platform,
@@ -39,43 +40,52 @@ def add_game(request):
 
 def add_game_game(request, game_id=None):
 	if game_id is None:
-		game = ComputerGame()
+		game = {
+			"game": {}
+		}
 	else:
-		game = ComputerGame.objects.get(id=game_id)
-	game.name = request.POST['name']
-	game.genre = request.POST['genre']
-	game.setting = request.POST['setting']
-	game.date = datetime.strptime(request.POST['date'], '%Y-%m-%d').date()
-	game.save()
+		game = requests.get('http://localhost:{0}/catalog/game/{1}/'.format(PORT, game_id)).json()
+	game['game']['name'] = request.POST['name']
+	game['game']['genre'] = request.POST['genre']
+	game['game']['setting'] = request.POST['setting']
+	game['game']['date'] = request.POST['date']
+	game['game']['company'] = int(request.POST['company'])
+	game['game']['engine'] = int(request.POST['engine'])
 	platform = []
 	for pl in request.POST.getlist('platform'):
-		platform.append(Platform.objects.get(name=pl))
-	game.platform.clear()
-	for pl in platform:
-		game.platform.add(pl)
-	company = Company.objects.get(name=request.POST['company'])
-	game.company = company
-	engine = Engine.objects.get(name=request.POST['engine'])
-	game.engine = engine
-	game.save()
+		platform.append(int(pl))
+	game['game']['platform'] = platform
+	if game_id is None:
+		requests.post('http://localhost:{0}/catalog/game/'.format(PORT), json=game)
+	else:
+		requests.put('http://localhost:{0}/catalog/game/{1}/'.format(PORT, game['game']['id']), json=game)
 	return HttpResponseRedirect(reverse('catalog:view_game'))
 
 
 def view_game_id(request, game_id):
-	game = ComputerGame.objects.get(id=game_id)
-	print('View {0}'.format(game.name))
-	return render(request, 'catalog/view_game_id.html', {'game': game})
+	game = requests.get('http://localhost:{0}/catalog/game/{1}/'.format(PORT, game_id)).json()['game']
+	print('View {0}'.format(game['name']))
+	company = requests.get('http://localhost:{0}/catalog/company/{1}/'.format(PORT, game['company'])).json()['company']
+	engine = requests.get('http://localhost:{0}/catalog/engine/{1}/'.format(PORT, game['engine'])).json()['engine']
+	platform = []
+	for pl in game['platform']:
+		platform.append(requests.get('http://localhost:{0}/catalog/platform/{1}/'.format(PORT, pl)).json()['platform'])
+	return render(request, 'catalog/view_game_id.html', {
+		'game': game,
+		'company': company,
+		'engine': engine,
+		'platform': platform,
+	})
 
 
 def edit_game_id(request, game_id):
-	game = ComputerGame.objects.get(id=game_id)
-	print('Edit {0}'.format(game.name))
-	company = Company.objects.all()
-	platform = Platform.objects.all()
-	engine = Engine.objects.all()
+	game = requests.get('http://localhost:{0}/catalog/game/{1}/'.format(PORT, game_id)).json()['game']
+	print('Edit {0}'.format(game['name']))
+	company = requests.get('http://localhost:{0}/catalog/company/'.format(PORT)).json()['company']
+	platform = requests.get('http://localhost:{0}/catalog/platform/'.format(PORT)).json()['platform']
+	engine = requests.get('http://localhost:{0}/catalog/engine/'.format(PORT)).json()['engine']
 	return render(request, 'catalog/edit_game_id.html', {
 		'game': game,
-		'game_date': game.date.strftime('%Y-%m-%d'),
 		'company': company,
 		'platform': platform,
 		'engine': engine
@@ -87,16 +97,16 @@ def edit_game_id_edit(request, game_id):
 
 
 def delete_game_id(request, game_id):
-	game = ComputerGame.objects.get(id=game_id)
-	print('Delete {0}'.format(game.name))
-	game.delete()
+	game = requests.get('http://localhost:{0}/catalog/game/{1}/'.format(PORT, game_id)).json()['game']
+	requests.delete('http://localhost:{0}/catalog/game/{1}/'.format(PORT, game_id))
+	print('Delete {0}'.format(game['name']))
 	return HttpResponseRedirect(reverse('catalog:view_game'))
 
 
 def view_company(request):
 	print('Company list')
-	my_list = Company.objects.all()
-	paginator = Paginator(my_list, 5)
+	my_list = requests.get('http://localhost:{0}/catalog/company/'.format(PORT)).json()
+	paginator = Paginator(my_list['company'], 5)
 	page = request.GET.get('page')
 	try:
 		contacts = paginator.page(page)
@@ -108,8 +118,8 @@ def view_company(request):
 
 
 def view_company_id(request, company_id):
-	company = Company.objects.get(id=company_id)
-	print('View {0}'.format(company.name))
+	company = requests.get('http://localhost:{0}/catalog/company/{1}/'.format(PORT, company_id)).json()['company']
+	print('View {0}'.format(company['name']))
 	return render(request, 'catalog/view_company_id.html', {'company': company})
 
 
@@ -120,22 +130,26 @@ def add_company(request):
 
 def add_company_company(request, company_id=None):
 	if company_id is None:
-		company = Company()
+		company = {
+			"company": {}
+		}
 	else:
-		company = Company.objects.get(id=company_id)
-	company.name = request.POST['name']
-	company.place = request.POST['place']
-	company.date = datetime.strptime(request.POST['date'], '%Y-%m-%d').date()
-	company.save()
+		company = requests.get('http://localhost:{0}/catalog/company/{1}/'.format(PORT, company_id)).json()
+	company['company']['name'] = request.POST['name']
+	company['company']['place'] = request.POST['place']
+	company['company']['date'] = request.POST['date']
+	if company_id is None:
+		requests.post('http://localhost:{0}/catalog/company/'.format(PORT), json=company)
+	else:
+		requests.put('http://localhost:{0}/catalog/company/{1}/'.format(PORT, company['company']['id']), json=company)
 	return HttpResponseRedirect(reverse('catalog:view_company'))
 
 
 def edit_company_id(request, company_id):
-	company = Company.objects.get(id=company_id)
-	print('Edit {0}'.format(company.name))
+	company = requests.get('http://localhost:{0}/catalog/company/{1}/'.format(PORT, company_id)).json()['company']
+	print('Edit {0}'.format(company['name']))
 	return render(request, 'catalog/edit_company_id.html', {
-		'company': company,
-		'company_date': company.date.strftime('%Y-%m-%d')
+		'company': company
 	})
 
 
@@ -144,16 +158,16 @@ def edit_company_id_edit(request, company_id):
 
 
 def delete_company_id(request, company_id):
-	company = Company.objects.get(id=company_id)
-	print('View {0}'.format(company.name))
-	company.delete()
+	company = requests.get('http://localhost:{0}/catalog/company/{1}/'.format(PORT, company_id)).json()['company']
+	requests.delete('http://localhost:{0}/catalog/company/{1}/'.format(PORT, company_id))
+	print('Delete {0}'.format(company['name']))
 	return HttpResponseRedirect(reverse('catalog:view_company'))
 
 
 def view_platform(request):
 	print('Platform list')
-	my_list = Platform.objects.all()
-	paginator = Paginator(my_list, 5)
+	my_list = requests.get('http://localhost:{0}/catalog/platform/'.format(PORT)).json()
+	paginator = Paginator(my_list['platform'], 5)
 	page = request.GET.get('page')
 	try:
 		contacts = paginator.page(page)
@@ -165,45 +179,47 @@ def view_platform(request):
 
 
 def view_platform_id(request, platform_id):
-	platform = Platform.objects.get(id=platform_id)
-	print('View {0}'.format(platform.name))
-	return render(request, 'catalog/view_platform_id.html', {'platform': platform})
+	platform = requests.get('http://localhost:{0}/catalog/platform/{1}/'.format(PORT, platform_id)).json()['platform']
+	company = requests.get('http://localhost:{0}/catalog/company/{1}/'.format(PORT, platform['company'])).json()['company']
+	print('View {0}'.format(platform['name']))
+	return render(request, 'catalog/view_platform_id.html', {
+		'platform': platform,
+		'company': company
+	})
 
 
 def add_platform(request):
 	print('Add platform')
-	company = Company.objects.all()
-	game = ComputerGame.objects.all()
+	company = requests.get('http://localhost:{0}/catalog/company/'.format(PORT)).json()['company']
 	return render(request, 'catalog/add_platform.html',  {
-		'company': company,
-		'game': game
+		'company': company
 	})
 
 
 def add_platform_platform(request, platform_id=None):
 	if platform_id is None:
-		platform = Platform()
+		platform = {
+			"platform": {}
+		}
 	else:
-		platform = Platform.objects.get(id=platform_id)
-	platform.name = request.POST['name']
-	platform.date = datetime.strptime(request.POST['date'], '%Y-%m-%d').date()
-	platform.save()
-	company = Company.objects.get(name=request.POST['company'])
-	platform.company = company
-	platform.save()
+		platform = requests.get('http://localhost:{0}/catalog/platform/{1}/'.format(PORT, platform_id)).json()
+	platform['platform']['name'] = request.POST['name']
+	platform['platform']['date'] = request.POST['date']
+	platform['platform']['company'] = int(request.POST['company'])
+	if platform_id is None:
+		requests.post('http://localhost:{0}/catalog/platform/'.format(PORT), json=platform)
+	else:
+		requests.put('http://localhost:{0}/catalog/platform/{1}/'.format(PORT, platform['platform']['id']), json=platform)
 	return HttpResponseRedirect(reverse('catalog:view_platform'))
 
 
 def edit_platform_id(request, platform_id):
-	platform = Platform.objects.get(id=platform_id)
-	print('Edit {0}'.format(platform.name))
-	company = Company.objects.all()
-	game = ComputerGame.objects.all()
-	return render(request, 'catalog/edit_platform_id.html',	{
+	platform = requests.get('http://localhost:{0}/catalog/platform/{1}/'.format(PORT, platform_id)).json()['platform']
+	print('Edit {0}'.format(platform['name']))
+	company = requests.get('http://localhost:{0}/catalog/company/'.format(PORT)).json()['company']
+	return render(request, 'catalog/edit_platform_id.html', {
 		'platform': platform,
-		'platform_date': platform.date.strftime('%Y-%m-%d'),
 		'company': company,
-		'game': game
 	})
 
 
@@ -212,16 +228,16 @@ def edit_platform_id_edit(request, platform_id):
 
 
 def delete_platform_id(request, platform_id):
-	platform = Platform.objects.get(id=platform_id)
-	print('View {0}'.format(platform.name))
-	platform.delete()
+	platform = requests.get('http://localhost:{0}/catalog/platform/{1}/'.format(PORT, platform_id)).json()['platform']
+	requests.delete('http://localhost:{0}/catalog/platform/{1}/'.format(PORT, platform_id))
+	print('Delete {0}'.format(platform['name']))
 	return HttpResponseRedirect(reverse('catalog:view_platform'))
 
 
 def view_engine(request):
 	print('Engine list')
-	my_list = Engine.objects.all()
-	paginator = Paginator(my_list, 5)
+	my_list = requests.get('http://localhost:{0}/catalog/engine/'.format(PORT)).json()
+	paginator = Paginator(my_list['engine'], 5)
 	page = request.GET.get('page')
 	try:
 		contacts = paginator.page(page)
@@ -233,40 +249,46 @@ def view_engine(request):
 
 
 def view_engine_id(request, engine_id):
-	engine = Engine.objects.get(id=engine_id)
-	print('View {0}'.format(engine.name))
-	return render(request, 'catalog/view_engine_id.html', {'engine': engine})
+	engine = requests.get('http://localhost:{0}/catalog/engine/{1}/'.format(PORT, engine_id)).json()['engine']
+	company = requests.get('http://localhost:{0}/catalog/company/{1}/'.format(PORT, engine['company'])).json()['company']
+	print('View {0}'.format(engine['name']))
+	return render(request, 'catalog/view_engine_id.html', {
+		'engine': engine,
+		'company': company
+	})
 
 
 def add_engine(request):
 	print('Add engine')
-	company = Company.objects.all()
+	company = requests.get('http://localhost:{0}/catalog/company/'.format(PORT)).json()['company']
 	return render(request, 'catalog/add_engine.html', {'company': company})
 
 
 def add_engine_engine(request, engine_id=None):
 	if engine_id is None:
-		engine = Engine()
+		engine = {
+			"engine": {}
+		}
 	else:
-		engine = Engine.objects.get(id=engine_id)
-	engine.name = request.POST['name']
-	engine.language = request.POST['language']
-	engine.date = datetime.strptime(request.POST['date'], '%Y-%m-%d').date()
-	engine.save()
-	company = Company.objects.get(name=request.POST['company'])
-	engine.company = company
-	engine.save()
+		engine = requests.get('http://localhost:{0}/catalog/engine/{1}/'.format(PORT, engine_id)).json()
+	engine['engine']['name'] = request.POST['name']
+	engine['engine']['language'] = request.POST['language']
+	engine['engine']['date'] = request.POST['date']
+	engine['engine']['company'] = int(request.POST['company'])
+	if engine_id is None:
+		requests.post('http://localhost:{0}/catalog/engine/'.format(PORT), json=engine)
+	else:
+		requests.put('http://localhost:{0}/catalog/engine/{1}/'.format(PORT, engine['engine']['id']), json=engine)
 	return HttpResponseRedirect(reverse('catalog:view_engine'))
 
 
 def edit_engine_id(request, engine_id):
-	engine = Engine.objects.get(id=engine_id)
-	print('Edit {0}'.format(engine.name))
-	company = Company.objects.all()
+	engine = requests.get('http://localhost:{0}/catalog/engine/{1}/'.format(PORT, engine_id)).json()['engine']
+	print('Edit {0}'.format(engine['name']))
+	company = requests.get('http://localhost:{0}/catalog/company/'.format(PORT)).json()['company']
 	return render(request, 'catalog/edit_engine_id.html', {
 		'engine': engine,
-		'engine_date': engine.date.strftime('%Y-%m-%d'),
-		'company': company
+		'company': company,
 	})
 
 
@@ -275,7 +297,7 @@ def edit_engine_id_edit(request, engine_id):
 
 
 def delete_engine_id(request, engine_id):
-	engine = Engine.objects.get(id=engine_id)
-	print('View {0}'.format(engine.name))
-	engine.delete()
+	engine = requests.get('http://localhost:{0}/catalog/engine/{1}/'.format(PORT, engine_id)).json()['engine']
+	requests.delete('http://localhost:{0}/catalog/engine/{1}/'.format(PORT, engine_id))
+	print('Delete {0}'.format(engine['name']))
 	return HttpResponseRedirect(reverse('catalog:view_engine'))

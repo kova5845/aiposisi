@@ -22,13 +22,13 @@
                 <dd><p class="games-base-description">{{game.date}}</p></dd>
 
                 <dt><h3 class="games-base-names">Company:</p></dt>
-                <dd><p class="games-base-description">{{game.company.name}}</p></dd>
+                <dd><p class="games-base-description">{{company.name}}</p></dd>
 
                 <dt><h3 class="games-base-names">Engine:</p></dt>
-                <dd><p class="games-base-description">{{game.engine.name}}</p></dd>
+                <dd><p class="games-base-description">{{engine.name}}</p></dd>
 
                 <dt><h3 class="games-base-names">Platform:</p></dt>
-                {% for i in game.platform.all %}
+                {% for i in platform %}
                     <dd><p class="games-base-description">{{i.name}}</p></dd>
                 {% endfor %}
             </dl>

@@ -12,14 +12,14 @@
             <input type="text" name="name" placeholder="Name (Required)" minlength="1" value="{{engine.name}}" required>
             <input type="text" name="language" placeholder="Language (Required)" minlength="1" value="{{engine.language}}" required>
             <input type="date" name="date"
-               value="{{engine_date}}"
+               value="{{engine.date}}"
                min="1900-01-01" max="2020-12-31" required>
             <select class = "selectors" name="company">
                 {% for i in company %}
-                    {% if i == engine.company %}
-                        <option selected="selected">{{i.name}}</option>
+                    {% if i.id == engine.company %}
+                        <option value="{{i.id}}" selected="selected">{{i.name}}</option>
                     {% else %}
-                        <option>{{i.name}}</option>
+                        <option value="{{i.id}}">{{i.name}}</option>
                     {% endif %}
                 {% endfor %}
             </select>

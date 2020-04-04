@@ -13,32 +13,32 @@
             <input type="text" name="genre" placeholder="Genre (Required)" minlength="1" value="{{game.genre}}" required>
             <input type="text" name="setting" placeholder="Setting (Required)" minlength="1" value="{{game.setting}}" required>
             <input type="date" name="date"
-               value="{{game_date}}"
+               value="{{game.date}}"
                min="1900-01-01" max="2020-12-31" required>
             <select class = "selectors" name="company">
                 {% for i in company %}
-                    {% if i == game.company %}
-                        <option selected="selected">{{i.name}}</option>
+                    {% if i.id == game.company %}
+                        <option value="{{i.id}}" selected="selected">{{i.name}}</option>
                     {% else %}
-                        <option>{{i.name}}</option>
+                        <option value="{{i.id}}">{{i.name}}</option>
                     {% endif %}
                 {% endfor %}
             </select>
             <select class = "selectors" name="platform" multiple>
                 {% for i in platform %}
-                    {% if i in game.platform.all %}
-                        <option selected="selected">{{i.name}}</option>
+                    {% if i.id in game.platform %}
+                        <option value="{{i.id}}" selected="selected">{{i.name}}</option>
                     {% else %}
-                        <option>{{i.name}}</option>
+                        <option value="{{i.id}}">{{i.name}}</option>
                     {% endif %}
                 {% endfor %}
             </select>
             <select class = "selectors" name="engine">
                 {% for i in engine %}
-                    {% if i == game.engine %}
-                        <option selected="selected">{{i.name}}</option>
+                    {% if i.id == game.engine %}
+                        <option value="{{i.id}}" selected="selected">{{i.name}}</option>
                     {% else %}
-                        <option>{{i.name}}</option>
+                        <option value="{{i.id}}">{{i.name}}</option>
                     {% endif %}
                 {% endfor %}
             </select>

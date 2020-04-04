@@ -11,14 +11,14 @@
             {% csrf_token %}
             <input type="text" name="name" placeholder="Name (Required)" minlength="1" value="{{platform.name}}" required>
             <input type="date" name="date"
-               value="{{platform_date}}"
+               value="{{platform.date}}"
                min="1900-01-01" max="2020-12-31" required>
             <select class = "selectors" name="company">
                 {% for i in company %}
-                    {% if i == platform.company %}
-                        <option selected="selected">{{i.name}}</option>
+                    {% if i.id == platform.company %}
+                        <option value="{{i.id}}" selected="selected">{{i.name}}</option>
                     {% else %}
-                        <option>{{i.name}}</option>
+                        <option value="{{i.id}}">{{i.name}}</option>
                     {% endif %}
                 {% endfor %}
             </select>
